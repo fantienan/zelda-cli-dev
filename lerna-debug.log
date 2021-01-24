@@ -1,0 +1,11 @@
+0 silly argv {
+0 silly argv   _: [ 'create' ],
+0 silly argv   lernaVersion: '3.22.1',
+0 silly argv   '$0': 'C:\\Program Files\\nodejs\\node_modules\\lerna\\cli.js',
+0 silly argv   name: 'utils/log'
+0 silly argv }
+1 notice cli v3.22.1
+2 verbose rootPath D:\study\imooc\web-front-end-architect\code\zelda-cli-dev
+3 error TypeError: Expected the input to be `string | string[]`
+3 error     at camelCase (D:\study\imooc\web-front-end-architect\code\zelda-cli-dev\node_modules\camelcase\index.js:34:9)
+3 error     at CreateCommand.initialize (D:\study\imooc\web-front-end-architect\code\zelda-cli-dev\node_modules\@lerna\create\index.js:63:22)
