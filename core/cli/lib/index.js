@@ -5,24 +5,31 @@ const colors = require("colors");
 const userHome = require("user-home");
 const pathExists = require("path-exists").sync;
 const log = require("@zelda-cli-dev/log");
+const commander = require("commander");
 const pkg = require("../package.json");
 const constant = require("./const");
 
 module.exports = core;
 
 let args;
-function core() {
+const program = new commander.Command();
+async function core() {
   try {
     checkPkgVersion();
     checkNodeVersion();
     checkRoot();
     checkUserHome();
-    checkInputArgs();
+    // checkInputArgs();
     checkEnv();
+    await checkGlobalUpdate();
+    registerCommand();
   } catch (e) {
     log.error(e.message);
   }
 }
+/**
+ * 命令注册
+ */
 // 检查版本号
 function checkPkgVersion() {}
 
@@ -76,8 +83,7 @@ function checkEnv() {
       path: path.resolve(userHome, ".env"),
     });
   }
-  createDefaultConfig()
-  console.log("环境变量", process.env.CLI_HOME);
+  createDefaultConfig();
 }
 
 function createDefaultConfig() {
@@ -91,4 +97,55 @@ function createDefaultConfig() {
     cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME);
   }
   process.env.CLI_HOME = cliConfig.cliHome;
+}
+// 检查版本号是否为最新
+// 1. 获取当前版本号和模块
+// 2. 调用npm API，获取所有版本号
+// 3. 提取所有版本号，对比哪些版本号是大于当前版本号
+// 4. 获取最新的版本号，提示用户更新到该版本
+async function checkGlobalUpdate() {
+  const currentVersion = pkg.version;
+  const npmName = pkg.name;
+  const { getNpmSemverVersion } = require("@zelda-cli-dev/get-npm-info");
+  const lastVersion = await getNpmSemverVersion(currentVersion, npmName);
+  if (lastVersion && semver.gt(lastVersion, currentVersion)) {
+    log.warn(
+      colors.yellow(`请手动更新 ${npmName}，当前版本：${currentVersion}，最新版本：${lastVersion}
+    更新命令：npm i -g ${npmName}`)
+    );
+  }
+}
+
+/**
+ * 命令注册
+ */
+
+function registerCommand() {
+  program
+    .name(Object.keys(pkg.bin)[0])
+    .usage("<command> [options]")
+    .version(pkg.version)
+    .option("-d, --debug", "是否开启调试模式", false);
+  // 开启debug模式
+  program.on("option:debug", function () {
+    if (program.debug) {
+      process.env.LOG_LEVEL = "verbose";
+    } else {
+      process.env.LOG_LEVEL = "info";
+    }
+    log.level = process.env.LOG_LEVEL;
+  });
+  // 为命中的命令监听
+  program.on("command:*", function (obj) {
+    const availableCommands = program.commands.map((cmd) => cmd.name());
+    console.log(colors.red("未知命令：" + obj[0]));
+    if (availableCommands.length > 0) {
+      console.log(colors.red("可用命令：" + availableCommands.join(",")));
+    }
+  });
+  program.parse(process.argv);
+  // 对未输入命令的处理
+  if (program.args && !program.args.length) {
+    program.outputHelp();
+  }
 }

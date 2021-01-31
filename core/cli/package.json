@@ -25,8 +25,10 @@
   },
   "gitHead": "a5be675e4fc03f50a9157c01d159e0c1e6120933",
   "dependencies": {
+    "@zelda-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@zelda-cli-dev/log": "file:../../utils/log",
     "colors": "^1.4.0",
+    "commander": "^7.0.0",
     "dotenv": "^8.2.0",
     "exists": "^1.0.1",
     "import-local": "^3.0.2",
