@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node .\\core\\cli\\bin\\index.js"
+    "start": "node .\\core\\cli\\bin\\index.js init --targetPath D:\\study\\imooc\\web-front-end-architect\\code\\zelda-cli-dev\\commands\\init --debug"
   },
   "keywords": [],
   "author": "",
+  "repository": "",
   "license": "ISC",
   "devDependencies": {
     "lerna": "^3.22.1"

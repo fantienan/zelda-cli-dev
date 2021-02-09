@@ -4,34 +4,39 @@ const semver = require("semver");
 const colors = require("colors");
 const userHome = require("user-home");
 const pathExists = require("path-exists").sync;
-const log = require("@zelda-cli-dev/log");
 const commander = require("commander");
+const log = require("@zelda-cli-dev/log");
 const pkg = require("../package.json");
 const constant = require("./const");
+// const init = require("@zelda-cli-dev/init");
+const exec = require("@zelda-cli-dev/exec");
 
 module.exports = core;
 
-let args;
 const program = new commander.Command();
+
 async function core() {
   try {
-    checkPkgVersion();
-    checkNodeVersion();
-    checkRoot();
-    checkUserHome();
-    // checkInputArgs();
-    checkEnv();
-    await checkGlobalUpdate();
+    await prepare();
     registerCommand();
   } catch (e) {
     log.error(e.message);
   }
 }
-/**
- * 命令注册
- */
+// 脚手架准备阶段（脚手架启动阶段）
+async function prepare() {
+  checkPkgVersion();
+  checkNodeVersion();
+  checkRoot();
+  checkUserHome();
+  checkEnv();
+  await checkGlobalUpdate();
+}
+
 // 检查版本号
-function checkPkgVersion() {}
+function checkPkgVersion() {
+	console.log(colors.green(pkg.version))
+}
 
 // 检查node版本号
 function checkNodeVersion() {
@@ -58,22 +63,6 @@ function checkUserHome() {
   }
 }
 
-// 检查入参，全局注册log debug模式
-function checkInputArgs() {
-  const minimist = require("minimist");
-  args = minimist(process.argv.slice(2));
-  checkArgs();
-}
-
-function checkArgs() {
-  if (args.debug) {
-    process.env.LOG_LEVEL = "verbose";
-  } else {
-    process.env.LOG_LEVEL = "info";
-  }
-  log.level = process.env.LOG_LEVEL;
-}
-
 // 检查环境变量
 function checkEnv() {
   const dotenv = require("dotenv");
@@ -91,12 +80,12 @@ function createDefaultConfig() {
     home: userHome,
   };
   // 检查环境变量是否存在脚手架主目录
-  if (process.env.CLI_HOME) {
-    cliConfig["cliHome"] = path.join(userHome, process.env.CLI_HOME);
+  if (process.env.CLI_HOME_PATH) {
+    cliConfig["cliHome"] = path.join(userHome, process.env.CLI_HOME_PATH);
   } else {
     cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME);
   }
-  process.env.CLI_HOME = cliConfig.cliHome;
+  process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }
 // 检查版本号是否为最新
 // 1. 获取当前版本号和模块
@@ -116,26 +105,34 @@ async function checkGlobalUpdate() {
   }
 }
 
-/**
- * 命令注册
- */
-
+// commander脚手架初始化（命令注册）
 function registerCommand() {
   program
     .name(Object.keys(pkg.bin)[0])
     .usage("<command> [options]")
     .version(pkg.version)
-    .option("-d, --debug", "是否开启调试模式", false);
+    // 注册全局配置
+    .option("-d, --debug", "是否开启调试模式", false)
+    .option("-tp, --targetPath <targetPath>", "是否制定本地调试文件路径", "");
+
+  // 注册子命令
+  program
+    .command("init [projectName]")
+    .option("-f, --force", "是否强制初始化项目")
+    .action(exec);
+
+  // command全局配置
+  const globalOptions = program.opts();
   // 开启debug模式
   program.on("option:debug", function () {
-    if (program.debug) {
+    if (globalOptions.debug) {
       process.env.LOG_LEVEL = "verbose";
     } else {
       process.env.LOG_LEVEL = "info";
     }
     log.level = process.env.LOG_LEVEL;
   });
-  // 为命中的命令监听
+  // 未命中的命令监听
   program.on("command:*", function (obj) {
     const availableCommands = program.commands.map((cmd) => cmd.name());
     console.log(colors.red("未知命令：" + obj[0]));
@@ -143,6 +140,11 @@ function registerCommand() {
       console.log(colors.red("可用命令：" + availableCommands.join(",")));
     }
   });
+
+  program.on("option:targetPath", function () {
+    process.env.CLI_TARGET_PATH = globalOptions.targetPath;
+  });
+
   program.parse(process.argv);
   // 对未输入命令的处理
   if (program.args && !program.args.length) {
