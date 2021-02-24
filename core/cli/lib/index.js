@@ -14,19 +14,21 @@ const exec = require("@zelda-cli-dev/exec");
 module.exports = core;
 
 const program = new commander.Command();
-
+let globalOptions;
 async function core() {
   try {
     await prepare();
     registerCommand();
   } catch (e) {
     log.error(e.message);
+    if (globalOptions.debug) {
+      console.log(e)
+    }
   }
 }
 // 脚手架准备阶段（脚手架启动阶段）
 async function prepare() {
   checkPkgVersion();
-  checkNodeVersion();
   checkRoot();
   checkUserHome();
   checkEnv();
@@ -36,17 +38,6 @@ async function prepare() {
 // 检查版本号
 function checkPkgVersion() {
 	console.log(colors.green(pkg.version))
-}
-
-// 检查node版本号
-function checkNodeVersion() {
-  const currentVersion = process.version;
-  const lowVersion = constant.LOWEST_NODE_VERSION;
-  if (!semver.gte(currentVersion, lowVersion)) {
-    throw new Error(
-      colors.red(`zelda-cli-dev 需要安装 v${lowVersion} 以上版本的 Node.js`)
-    );
-  }
 }
 
 // 检查root账户
@@ -122,7 +113,7 @@ function registerCommand() {
     .action(exec);
 
   // command全局配置
-  const globalOptions = program.opts();
+  globalOptions = program.opts();
   // 开启debug模式
   program.on("option:debug", function () {
     if (globalOptions.debug) {

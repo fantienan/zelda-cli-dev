@@ -1,5 +1,5 @@
 {
-  "name": "@zelda-cli-dev/package",
+  "name": "@zelda-cli-dev/command",
   "version": "1.0.4",
   "description": "> TODO: description",
   "author": "fantienan <363982607@qq.com>",
@@ -27,12 +27,8 @@
     "url": "https://github.com/fantienan/zelda-cli-dev/issues"
   },
   "dependencies": {
-    "@zelda-cli-dev/format-path": "file:../../utils/format-path",
-    "@zelda-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
-    "@zelda-cli-dev/utils": "file:../../utils/utils",
-    "fs-extra": "^9.1.0",
-    "npminstall": "^4.10.0",
-    "path-exists": "^4.0.0",
-    "pkg-dir": "^5.0.0"
+    "colors": "^1.4.0",
+    "semver": "^7.3.4",
+    "@zelda-cli-dev/log": "file:../../utils/log"
   }
 }

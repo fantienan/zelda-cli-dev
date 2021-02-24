@@ -29,21 +29,31 @@ async function getNpmVersions(npmName, registry) {
 }
 // 获取大于当前版本号的数组并降序排序
 function getSemverVersions(baseVersion, versions) {
-  return versions 
+  return versions
     .filter((version) => semver.satisfies(version, `^${baseVersion}`))
     .sort((a, b) => semver.gt(b, a));
 }
 // 获取最新版本号
 async function getNpmSemverVersion(baseVersion, npmName, registry) {
   const versions = await getNpmVersions(npmName, registry);
-	const newVersions = getSemverVersions(baseVersion, versions);
-	if (newVersions && newVersions.length > 0) {
-		return newVersions[0]
-	}
+  const newVersions = getSemverVersions(baseVersion, versions);
+  if (newVersions && newVersions.length > 0) {
+    return newVersions[0];
+  }
+}
+
+async function getNpmLatestVersion(npmName, registry) {
+  let versions = await getNpmVersions(npmName, registry);
+  if (versions) {
+    return versions.sort((a, b) => semver.gt(b, a))[0];
+  }
+  return null;
 }
 
 module.exports = {
   getNpmInfo,
   getNpmVersions,
   getNpmSemverVersion,
+  getDefaultRegistry,
+  getNpmLatestVersion
 };

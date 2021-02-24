@@ -25,5 +25,11 @@
   },
   "bugs": {
     "url": "https://github.com/fantienan/zelda-cli-dev/issues"
+  },
+  "dependencies": {
+    "@zelda-cli-dev/command": "file:../../models/command",
+    "@zelda-cli-dev/log": "file:../../utils/log",
+    "fs-extra": "^9.1.0",
+    "inquirer": "^7.3.3"
   }
 }
