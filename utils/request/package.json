@@ -1,9 +1,9 @@
 {
-  "name": "@zelda-cli-dev/utils",
+  "name": "@zelda-cli-dev/request",
   "version": "1.0.4",
-  "description": "zelda-cli-dev utils",
+  "description": "> TODO: description",
   "author": "fantienan <363982607@qq.com>",
-  "homepage": "",
+  "homepage": "https://github.com/fantienan/zelda-cli-dev#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -16,10 +16,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fantienan/zelda-cli-dev.git"
+  },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
+  "bugs": {
+    "url": "https://github.com/fantienan/zelda-cli-dev/issues"
+  },
   "dependencies": {
-    "cli-spinner": "^0.2.10"
+    "axios": "^0.21.1"
   }
 }

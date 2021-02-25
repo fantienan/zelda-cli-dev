@@ -29,7 +29,12 @@
   "dependencies": {
     "@zelda-cli-dev/command": "file:../../models/command",
     "@zelda-cli-dev/log": "file:../../utils/log",
+    "@zelda-cli-dev/package": "file:../../models/package",
+    "@zelda-cli-dev/request": "file:../../utils/request",
+    "@zelda-cli-dev/utils": "file:../../utils/utils",
     "fs-extra": "^9.1.0",
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "semver": "^7.3.4",
+    "user-home": "^2.0.0"
   }
 }

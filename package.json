@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node .\\core\\cli\\bin\\index.js init --debug",
-    "init:local": "zelda-cli-dev init --debug --targetPath .\\commands\\init --force test-project"
+    "init:local": "cd D:\\study\\imooc\\web-front-end-architect\\code\\test && zelda-cli-dev init --targetPath D:\\study\\imooc\\web-front-end-architect\\code\\zelda-cli-dev\\commands\\init test-name"
   },
   "keywords": [],
   "author": "",
