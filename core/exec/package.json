@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@zelda-cli-dev/package": "file:../../models/package",
-    "@zelda-cli-dev/log": "file:../../utils/log"
+    "@zelda-cli-dev/log": "file:../../utils/log",
+    "@zelda-cli-dev/utils": "file:../../utils/utils"
   }
 }

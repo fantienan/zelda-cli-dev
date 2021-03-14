@@ -1,8 +1,8 @@
 "use strict";
 const Package = require("@zelda-cli-dev/package");
 const path = require("path");
-const cp = require("child_process");
 const log = require("@zelda-cli-dev/log");
+const utils = require("@zelda-cli-dev/utils")
 
 const SETTINGS = {
   // init: "@zelda-cli-dev/init",
@@ -74,7 +74,7 @@ async function exec() {
       args[args.length - 1] = o;
       const code = `require('${rootFile}').call(null, ${JSON.stringify(args)})`;
       // cmd: node -e code
-      const child = spawn("node", ["-e", code], {
+      const child = utils.exec("node", ["-e", code], {
         cwd: process.cwd(),
         stdio: "inherit",
       });
@@ -92,12 +92,4 @@ async function exec() {
   }
 }
 
-// 兼容macOS window执行命令的参数，
-// 在window中的参数格式是：cp.spawn("cmd", ["/c", "node", "-e", code])其中/c表示浸没执行
-function spawn(command, args, options) {
-  const win32 = process.platform === "win32";
-  const cmd = win32 ? "cmd" : command;
-  const cmdArgs = win32 ? ["/c"].concat(command, args) : args;
-  return cp.spawn(cmd, cmdArgs, options || {});
-}
 module.exports = exec;
