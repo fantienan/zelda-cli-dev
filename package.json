@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "node .\\core\\cli\\bin\\index.js init --debug",
-    "init:local": "cd D:\\study\\imooc\\web-front-end-architect\\code\\test && zelda-cli-dev init --targetPath D:\\study\\imooc\\web-front-end-architect\\code\\zelda-cli-dev\\commands\\init test-name"
+    "init:local": "cd D:\\study\\imooc\\web-front-end-architect\\code\\test && zelda-cli-dev init --debug --targetPath D:\\study\\imooc\\web-front-end-architect\\code\\zelda-cli-dev\\commands\\init test-name",
+    "init:custom": "cd D:\\study\\imooc\\web-front-end-architect\\code\\custom-template-test && zelda-cli-dev init --debug --targetPath D:\\study\\imooc\\web-front-end-architect\\code\\zelda-cli-dev\\commands\\init test-name"
   },
   "keywords": [],
   "author": "",
