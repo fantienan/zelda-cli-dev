@@ -305,7 +305,6 @@ class InitCommand extends Command {
           validate: function (v) {
             const done = this.async();
             setTimeout(function () {
-              console.log("----", v);
               if (!semver.valid(v)) {
                 done("请输入合法版本号!");
                 return;
